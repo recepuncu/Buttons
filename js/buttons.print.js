@@ -130,10 +130,20 @@ DataTable.ext.buttons.print = {
 		}
 		html += '</tbody>';
 
-		if ( config.footer && data.footer ) {
-			html += '<tfoot>'+ addRow( data.footer, 'th' ) +'</tfoot>';
+		// Check if footer has multiple tr
+		if (config.footer && data.footer) {
+			if (data.footer.length > 0) {
+				if (Array.isArray(data.footer[0])) {
+					var trs = '';
+					for (var i = 0; i < data.footer.length; i++) {
+						trs += addRow(data.footer[i], 'th');
+					}
+					html += '<tfoot>' + trs + '</tfoot>';
+				} else {
+					html += '<tfoot>' + addRow(data.footer, 'th') + '</tfoot>';
+				}
+			}
 		}
-		html += '</table>';
 
 		// Open a new window for the printable table
 		var win = window.open( '', '' );
